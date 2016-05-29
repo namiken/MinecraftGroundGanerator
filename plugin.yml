@@ -1,0 +1,4 @@
+name: GenerateGroundPlugin
+version: 1.0
+main: generate.world.Main
+
