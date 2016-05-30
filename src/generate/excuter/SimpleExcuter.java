@@ -1,10 +1,9 @@
-package excuter;
+package generate.excuter;
 
-import hight_map.HeightMapInterface;
+import generate.blockSetter.BlockSetterInterface;
+import generate.hight_map.HeightMapInterface;
 
 import org.bukkit.Location;
-
-import blockSetter.BlockSetterInterface;
 
 public class SimpleExcuter implements GenerateExcuterInteface{
 

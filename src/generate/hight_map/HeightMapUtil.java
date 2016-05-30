@@ -1,4 +1,4 @@
-package hight_map;
+package generate.hight_map;
 
 public class HeightMapUtil {
 	public static void print(HeightMapInterface heightMap2) {

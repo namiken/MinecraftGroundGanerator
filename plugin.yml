@@ -2,3 +2,8 @@ name: GenerateGroundPlugin
 version: 1.0
 main: generate.world.Main
 
+commands:
+   GROUND_GENERATE:
+      description: goundgenerate block_setter height_map.
+      permission: gound.generate.goundgenerate
+      permission-message: You don't have <permission>

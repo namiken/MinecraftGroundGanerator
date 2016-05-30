@@ -1,4 +1,4 @@
-package blockSetter;
+package generate.blockSetter;
 
 import org.bukkit.Material;
 

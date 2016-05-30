@@ -1,8 +1,8 @@
 
-package imple;
+package generate.hight_map.imple;
 
-import hight_map.HeightMapInterface;
-import hight_map.HeightMapUtil;
+import generate.hight_map.HeightMapInterface;
+import generate.hight_map.HeightMapUtil;
 
 public class FlatLevel2HeightMap extends NormalHeightMap{
 	int originalSize;

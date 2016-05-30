@@ -1,4 +1,4 @@
-package blockSetter;
+package generate.blockSetter;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,8 +7,8 @@ public class OceanBlockSetter extends LiquidBlockSetter{
 
 	@Override
 	protected Material getLiquid(Location add, int height) {
-		return Material.GLASS;
-	}	
+		return Material.WATER;
+	}
 
 	@Override
 	protected Material getLiquidButtom(Location add, int height) {

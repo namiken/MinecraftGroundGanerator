@@ -1,4 +1,4 @@
-package blockSetter;
+package generate.blockSetter;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,11 +9,13 @@ public class NormalMountainBlockSetter implements BlockSetterInterface {
 	public NormalMountainBlockSetter(int maxHeight) {
 		this.maxHeight = maxHeight;
 	}
-	
+
+	@SuppressWarnings("deprecation")
 	@Override
 	public void setBlock(Location add, int height) {
 		for (int y = 0; y < add.getWorld().getMaxHeight(); y++) {
 			add.setY(y);
+			add.getBlock().setTypeId(0);
 			Material m = Material.AIR;
 			if (y == 0 || y == 1) {
 				m = Material.BEDROCK;

@@ -1,15 +1,17 @@
-package blockSetter;
+package generate.blockSetter;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 public abstract class LiquidBlockSetter implements BlockSetterInterface{
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void setBlock(Location add, int height) {
 		int maxHeight = add.getWorld().getMaxHeight();
 		for (int y = 0; y < maxHeight; y++) {
 			add.setY(y);
+			add.getBlock().setTypeId(0);
 			Material m = Material.AIR;
 			if (y < 2) {
 				m = Material.BEDROCK;
@@ -39,7 +41,7 @@ public abstract class LiquidBlockSetter implements BlockSetterInterface{
 //					m = getSurfaceUnder(add, height);
 //				} else if (y == height) {
 //					m = getSurface(add, height);
-//				}		
+//				}
 //			}
 				else if (height < y) {
 					if (y < 60) {
@@ -71,7 +73,7 @@ public abstract class LiquidBlockSetter implements BlockSetterInterface{
 			}
 		}
 	}
-	
+
 	abstract protected Material getLiquid(Location add, int height);
 
 	abstract protected Material getLiquidButtom(Location add, int height);
@@ -81,7 +83,7 @@ public abstract class LiquidBlockSetter implements BlockSetterInterface{
 	abstract protected Material getSurface(Location add, int height);
 
 	abstract protected Material getSurfaceUnder(Location add, int height);
-	
+
 	protected Material getUnderGround(Location add, int height) {
 		return Material.STONE;
 	}

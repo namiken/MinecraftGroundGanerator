@@ -1,8 +1,8 @@
-package hight_map;
+package generate.hight_map;
 
-import imple.NormalHeightMap;
+import generate.hight_map.imple.NormalHeightMap;
 
-public class MountainHeightMap extends NormalHeightMap{
+public class CopyOfMountainHeightMap extends NormalHeightMap{
 	
 	int originalSize;
 	

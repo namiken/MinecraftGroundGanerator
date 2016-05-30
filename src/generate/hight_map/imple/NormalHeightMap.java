@@ -1,7 +1,7 @@
-package imple;
+package generate.hight_map.imple;
 
-import hight_map.BaseHeightMap;
-import hight_map.HeightMapInterface;
+import generate.hight_map.BaseHeightMap;
+import generate.hight_map.HeightMapInterface;
 
 public class NormalHeightMap extends BaseHeightMap{
 	public NormalHeightMap() {

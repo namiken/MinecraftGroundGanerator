@@ -1,9 +1,10 @@
-package blockSetter;
+package generate.blockSetter;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 public abstract class AbstractGroundBlockSetter implements BlockSetterInterface{
+	@SuppressWarnings("deprecation")
 	public void setBlock(Location add, int height) {
 		int maxHeight = add.getWorld().getMaxHeight();
 		for (int y = 0; y < maxHeight; y++) {
@@ -18,9 +19,14 @@ public abstract class AbstractGroundBlockSetter implements BlockSetterInterface{
 			} else if (y == height) {
 				m = getSurface();
 			}
-			if (add.getBlock().getType() != m) {
-				add.getBlock().setType(m);
-			}
+			add.getBlock().setData((byte) 0);
+			setType(add, m);
+		}
+	}
+
+	public void setType(Location add, Material m) {
+		if (add.getBlock().getType() != m) {
+			add.getBlock().setType(m);
 		}
 	}
 

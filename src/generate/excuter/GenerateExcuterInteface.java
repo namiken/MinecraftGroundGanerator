@@ -1,7 +1,7 @@
-package excuter;
+package generate.excuter;
 
-import hight_map.HeightMapInterface;
-import blockSetter.BlockSetterInterface;
+import generate.blockSetter.BlockSetterInterface;
+import generate.hight_map.HeightMapInterface;
 
 public interface GenerateExcuterInteface {
 	public void excute(BlockSetterInterface setter, HeightMapInterface generate);

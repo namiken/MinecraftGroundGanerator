@@ -1,4 +1,4 @@
-package blockSetter;
+package generate.blockSetter;
 
 import java.util.Random;
 
@@ -7,7 +7,7 @@ import org.bukkit.Material;
 
 public class NetherLikeBlockSetter extends LiquidBlockSetter{
 	Random r = new Random();
-	
+
 	@Override
 	protected Material getLiquid(Location add, int height) {
 		return Material.LAVA;
@@ -25,7 +25,7 @@ public class NetherLikeBlockSetter extends LiquidBlockSetter{
 
 	@Override
 	protected Material getSurface(Location add, int height) {
-		return r.nextInt(30) == 0 ? Material.LAVA : Material.NETHERRACK;
+		return r.nextInt(50) == 0 ? Material.LAVA : Material.NETHERRACK;
 	}
 
 	@Override
