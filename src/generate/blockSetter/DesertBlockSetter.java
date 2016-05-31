@@ -1,7 +1,5 @@
 package generate.blockSetter;
 
-import java.util.Random;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 
@@ -25,8 +23,6 @@ public class DesertBlockSetter extends AbstractGroundBlockSetter{
 	protected Material getUnderGround() {
 		return Material.STONE;
 	}
-
-	Random r = new Random();
 
 	@SuppressWarnings("deprecation")
 	@Override

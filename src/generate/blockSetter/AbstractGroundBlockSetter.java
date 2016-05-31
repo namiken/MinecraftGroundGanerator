@@ -1,9 +1,18 @@
 package generate.blockSetter;
 
+import java.util.Random;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 public abstract class AbstractGroundBlockSetter implements BlockSetterInterface{
+	Random r = new Random();
+	@Override
+	public void setSeed(long seed) {
+		r = new Random(seed);
+	}
+
+	
 	@SuppressWarnings("deprecation")
 	public void setBlock(Location add, int height) {
 		int maxHeight = add.getWorld().getMaxHeight();

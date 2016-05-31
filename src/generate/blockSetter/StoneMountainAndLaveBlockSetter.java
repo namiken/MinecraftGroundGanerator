@@ -1,13 +1,9 @@
 package generate.blockSetter;
 
-import java.util.Random;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 public class StoneMountainAndLaveBlockSetter extends LiquidBlockSetter{
-	Random r = new Random();
-
 	@Override
 	protected Material getLiquid(Location add, int height) {
 		return Material.AIR;

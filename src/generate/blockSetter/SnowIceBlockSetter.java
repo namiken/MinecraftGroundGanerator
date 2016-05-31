@@ -3,30 +3,41 @@ package generate.blockSetter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 
-public class NetherLikeBlockSetter extends LiquidBlockSetter{
+public class SnowIceBlockSetter extends LiquidBlockSetter {
+
 	@Override
 	protected Material getLiquid(Location add, int height) {
-		return Material.LAVA;
+		return Material.ICE;
 	}
 
 	@Override
 	protected Material getLiquidButtom(Location add, int height) {
-		return Material.NETHERRACK;
+		return Material.GRAVEL;
 	}
 
 	@Override
 	protected Material getCoastline(Location add, int height) {
-		return Material.NETHERRACK;
+		return Material.SAND;
 	}
 
 	@Override
 	protected Material getSurface(Location add, int height) {
-		return r.nextInt(50) == 0 ? Material.LAVA : Material.NETHERRACK;
+		return Material.STONE;
 	}
 
 	@Override
 	protected Material getSurfaceUnder(Location add, int height) {
-		return Material.NETHERRACK;
+		return Material.STONE;
+	}
+	
+	@Override
+	public void setBlock(Location add, int height) {
+		super.setBlock(add, height);
+		
+		if (height + 1 < add.getWorld().getMaxHeight()) {
+			add.setY(height + 1);
+			add.getBlock().setType(Material.SNOW);
+		}
 	}
 
 }

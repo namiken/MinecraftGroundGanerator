@@ -1,10 +1,18 @@
 package generate.blockSetter;
 
+import java.util.Random;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 
 public abstract class LiquidBlockSetter implements BlockSetterInterface{
 
+	protected Random r = new Random();
+	@Override
+	public void setSeed(long seed) {
+		r = new Random(seed);
+	}
+	
 	@SuppressWarnings("deprecation")
 	@Override
 	public void setBlock(Location add, int height) {
@@ -68,9 +76,13 @@ public abstract class LiquidBlockSetter implements BlockSetterInterface{
 				} else if (y < height - 3) {
 					m = getSurfaceUnder(add, height);
 				}
-			if (add.getBlock().getType() != m) {
-				add.getBlock().setType(m);
-			}
+			setBlockType(add, m);
+		}
+	}
+
+	protected void setBlockType(Location add, Material m) {
+		if (add.getBlock().getType() != m) {
+			add.getBlock().setType(m);
 		}
 	}
 
