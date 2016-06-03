@@ -2,7 +2,6 @@
 package generate.hight_map.imple;
 
 import generate.hight_map.HeightMapInterface;
-import generate.hight_map.HeightMapUtil;
 
 public class FlatLevel2HeightMap extends NormalHeightMap{
 	int originalSize;
@@ -19,14 +18,13 @@ public class FlatLevel2HeightMap extends NormalHeightMap{
 		originalSize = getCreateSize();
 		//大きさを小さくする
 		super.generate((originalSize - 1) / 4);
-		HeightMapUtil.print(this);
 		
 		short[][] heightMap = getHeightMap();
 		//サイズを元に戻す
 		super.setSize(originalSize);
 		
 		
-		//今取得したデータをreduction飛ばしで入れていく
+		//今取得したデータを4つ飛ばしで入れていく
 		for (int i = 0; i < heightMap.length; i++) {
 			for (int j = 0; j < heightMap.length; j++) {
 				setHeight(i * 4, j * 4, heightMap[i][j]);

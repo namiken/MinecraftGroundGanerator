@@ -11,5 +11,7 @@ public interface HeightMapInterface {
 
 	public HeightMapInterface setSeed(long seed);
 
-	public HeightMapInterface setMaxMin(short min, short max);
+	public HeightMapInterface setMax(short max);
+
+	public HeightMapInterface setMin(short min);
 }

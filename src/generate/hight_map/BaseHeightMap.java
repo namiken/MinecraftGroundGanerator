@@ -7,7 +7,7 @@ import java.util.Random;
 public abstract class BaseHeightMap implements HeightMapInterface {
 
 	public static void main(String[] args) {
-		HeightMapInterface generate = new SteepHeightMap().setMaxMin((short)50, (short)170).setSeed(100).generate(100);
+		HeightMapInterface generate = new SteepHeightMap().setMax((short)170).setMin((short)50).setSeed(100).generate(100);
 		HeightMapUtil.print(generate, 100);
 //		HeightMapInterface generate2 = new NormalHeightMap().setMaxMin((short)50, (short)170).generate(100);
 //		HeightMapUtil.print(generate2, 100);
@@ -42,16 +42,26 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 	short max = 70;
 	short min = 50;
 	@Override
-	public HeightMapInterface setMaxMin(short min, short max) {
+	public HeightMapInterface setMax(short max) {
+		if (max < 0) {
+			throw new RuntimeException("max dont allow negative value");
+		}
+		this.max = max;
 		if (max < min) {
-			return this;
+			this.min = (short) (max - 1);
 		}
-		if (max >= 0) {
-			this.max = max;
+		return this;
+	}
+	
+	@Override
+	public HeightMapInterface setMin(short min) {
+		if (min < 0) {
+			throw new RuntimeException("max dont allow negative value");
 		}
-
-		if (min >= 0) {
-			this.min = min;
+		
+		this.min = min;
+		if (max < min) {
+			this.max = (short) (min + 1);
 		}
 		return this;
 	}
@@ -69,8 +79,8 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 //	}
 
 	protected void setSize(int size) {
-		if (size < 17) {
-			size = 17;
+		if (size < 2) {
+			size = 2;
 			heightMap = new short[size][size];
 		} else {
 			// 2^xの形にする

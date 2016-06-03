@@ -26,16 +26,23 @@ public class NestedLoopRunnable extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		for (;loop1 < end1; loop1+=step1) {
-			for (;loop2 < end2; loop2+=step2) {
-				boolean isGoReturn = excuter.excute(loop1, loop2, count);
-				count++;
-				if (isGoReturn) {
-					return;
+		try {
+			for (;loop1 < end1; loop1+=step1) {
+				for (;loop2 < end2; loop2+=step2) {
+					boolean isGoReturn = excuter.excute(loop1, loop2, count);
+					count++;
+					if (isGoReturn) {
+						return;
+					}
 				}
+				loop2 = start2;
 			}
-			loop2 = start2;
+			cancel();
+			excuter.after();
+		} catch (Exception e) {
+			e.printStackTrace();
+			cancel();
+			excuter.after();
 		}
-		cancel();
 	}
 }
