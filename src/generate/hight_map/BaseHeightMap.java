@@ -1,14 +1,14 @@
 package generate.hight_map;
 
-import generate.hight_map.imple.SteepHeightMap;
+import generate.hight_map.imple.MountainHeightMap;
 
 import java.util.Random;
 
 public abstract class BaseHeightMap implements HeightMapInterface {
 
 	public static void main(String[] args) {
-		HeightMapInterface generate = new SteepHeightMap().setMaxMin((short)50, (short)170).setSeed(100).generate(100);
-		HeightMapUtil.print(generate, 100);
+		HeightMapInterface generate = new MountainHeightMap().setMaxMin((short)65, (short)170).setSeed(100).generate(200);
+		HeightMapUtil.print(generate, 200);
 //		HeightMapInterface generate2 = new NormalHeightMap().setMaxMin((short)50, (short)170).generate(100);
 //		HeightMapUtil.print(generate2, 100);
 	}
@@ -39,8 +39,8 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 		return this;
 	}
 
-	short max = 70;
-	short min = 50;
+	protected short max = 70;
+	protected short min = 50;
 	@Override
 	public HeightMapInterface setMaxMin(short min, short max) {
 		if (max < min) {

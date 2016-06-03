@@ -7,6 +7,7 @@ import generate.blockSetter.NetherLikeBlockSetter;
 import generate.blockSetter.NormalMountainBlockSetter;
 import generate.blockSetter.OceanBlockSetter;
 import generate.blockSetter.SnowBlockSetter;
+import generate.blockSetter.StoneGrassWaterBlockSetter;
 import generate.blockSetter.StoneMountainAndLaveBlockSetter;
 import generate.excuter.RunnableExcuter;
 import generate.hight_map.HeightMapInterface;
@@ -41,7 +42,8 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 		blockSetterMap.put("OCEAN", new OceanBlockSetter());
 		blockSetterMap.put("SNOW", new SnowBlockSetter());
 		blockSetterMap.put("STONE_MOUNTAIN", new StoneMountainAndLaveBlockSetter());
-		blockSetterMap.put("MOUNTAIN", new NormalMountainBlockSetter(150));
+		blockSetterMap.put("MOUNTAIN", new NormalMountainBlockSetter(170));
+		blockSetterMap.put("STONE_GRASS_WATER", new StoneGrassWaterBlockSetter());
 
 		heightMapMap = new HashMap<String, HeightMapInterface>();
 		heightMapMap.put("FLAT", new FlatHeightMap());
