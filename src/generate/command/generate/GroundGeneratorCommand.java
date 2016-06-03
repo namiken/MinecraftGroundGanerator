@@ -1,4 +1,4 @@
-package generate.command;
+package generate.command.generate;
 
 import generate.blockSetter.BlockSetterInterface;
 import generate.blockSetter.DesertBlockSetter;
@@ -8,7 +8,9 @@ import generate.blockSetter.NormalMountainBlockSetter;
 import generate.blockSetter.OceanBlockSetter;
 import generate.blockSetter.SnowBlockSetter;
 import generate.blockSetter.StoneGrassWaterBlockSetter;
+import generate.blockSetter.SnowIceBlockSetter;
 import generate.blockSetter.StoneMountainAndLaveBlockSetter;
+import generate.command.CommandOptionInterface;
 import generate.excuter.RunnableExcuter;
 import generate.hight_map.HeightMapInterface;
 import generate.hight_map.imple.FlatHeightMap;
@@ -42,8 +44,9 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 		blockSetterMap.put("OCEAN", new OceanBlockSetter());
 		blockSetterMap.put("SNOW", new SnowBlockSetter());
 		blockSetterMap.put("STONE_MOUNTAIN", new StoneMountainAndLaveBlockSetter());
-		blockSetterMap.put("MOUNTAIN", new NormalMountainBlockSetter(170));
+		blockSetterMap.put("MOUNTAIN", new NormalMountainBlockSetter(150));
 		blockSetterMap.put("STONE_GRASS_WATER", new StoneGrassWaterBlockSetter());
+		blockSetterMap.put("SNOW_ICE", new SnowIceBlockSetter());
 
 		heightMapMap = new HashMap<String, HeightMapInterface>();
 		heightMapMap.put("FLAT", new FlatHeightMap());
@@ -59,11 +62,14 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 			return false;
 		}
 
-
 		Player p = (Player) paramCommandSender;
 		Location rightLoc = Main.rightClick.get(p);
 		Location leftLoc = Main.leftClick.get(p);
 
+		if (rightLoc == null || leftLoc == null) {
+			p.sendMessage(ChatColor.RED + "ダイヤクワで場所を指定してください。" );
+			return true;
+		}
 		Location minLoc = new Location(rightLoc.getWorld(), Math.min(rightLoc.getX(), leftLoc.getX()), 0, Math.min(rightLoc.getZ(), leftLoc.getZ()));
 		Location maxLoc = new Location(rightLoc.getWorld(), Math.max(rightLoc.getX(), leftLoc.getX()), 0, Math.max(rightLoc.getZ(), leftLoc.getZ()));
 
@@ -78,11 +84,17 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 		BlockSetterInterface blockSetter = getBlockSetter(blockSetterName);
 		HeightMapInterface heightMap = getHeightMap(heightMapName);
 
-		if (paramArrayOfString.length == 4) {
-			short min = Short.parseShort(paramArrayOfString[2]);
-			short max = Short.parseShort(paramArrayOfString[3]);
-			heightMap.setMaxMin(min, max);
+		//optionを設定する
+		GenerateCommandOptionParser optionParser = new GenerateCommandOptionParser();
+		List<CommandOptionInterface> options = optionParser.getOptions(paramArrayOfString, paramCommandSender);
+		if (options == null) {
+			p.sendMessage(ChatColor.RED + "オプションにエラーがあるため実行出来ませんでした。");
+			return true;
 		}
+		for (CommandOptionInterface option : options) {
+			option.applyOption(blockSetter, heightMap);
+		}
+		
 
 		if (blockSetter == null) {
 			p.sendMessage(ChatColor.RED + "block setterが存在しません。" + blockSetterName);
@@ -93,9 +105,13 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 			return true;
 		}
 
-		p.sendMessage(ChatColor.BLUE + "実行します");
 		RunnableExcuter runnableExcuter = new RunnableExcuter(minLoc, maxLoc);
-		runnableExcuter.excute(blockSetter, heightMap);
+		if (runnableExcuter.isLocked()) {
+			p.sendMessage(ChatColor.RED + "現在実行中です。");
+		} else {
+			p.sendMessage(ChatColor.BLUE + "実行します");
+			runnableExcuter.excute(blockSetter, heightMap);
+		}
 		return true;
 	}
 
@@ -117,7 +133,7 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 		if (arg3.length == 1) {
 			return (List<String>)StringUtil.copyPartialMatches(arg3[0], blockSetterMap.keySet(), new ArrayList<String>(blockSetterMap.size()));
 		} else if (arg3.length == 2) {
-			return (List<String>)StringUtil.copyPartialMatches(arg3[0], heightMapMap.keySet(), new ArrayList<String>(heightMapMap.size()));
+			return (List<String>)StringUtil.copyPartialMatches(arg3[1], heightMapMap.keySet(), new ArrayList<String>(heightMapMap.size()));
 		}
 		return ImmutableList.of();
 	}

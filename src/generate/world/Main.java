@@ -1,6 +1,6 @@
 package generate.world;
 
-import generate.command.GroundGeneratorCommand;
+import generate.command.generate.GroundGeneratorCommand;
 
 import java.util.HashMap;
 
@@ -43,10 +43,10 @@ public class Main extends JavaPlugin implements Listener{
 		if (itemInHand.getType() == Material.DIAMOND_HOE) {
 			if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
 				leftClick.put(player, e.getClickedBlock().getLocation());
-				player.sendMessage(ChatColor.GREEN + "REGIST LEFT CLOCK");
+				player.sendMessage(ChatColor.GREEN + "REGIST LEFT CLICK");
 				e.setCancelled(true);
 			} else if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-				player.sendMessage(ChatColor.GREEN + "REGIST RIGHT CLOCK");
+				player.sendMessage(ChatColor.GREEN + "REGIST RIGHT CLICK");
 				rightClick.put(player, e.getClickedBlock().getLocation());
 				e.setCancelled(true);
 			}
