@@ -1,13 +1,20 @@
 package generate.hight_map;
 
 import generate.hight_map.imple.SteepHeightMap;
+import generate.hight_map.mapInitializer.AroundSmoothMapInitializer;
+import generate.hight_map.mapInitializer.MatrixInitializerInterface;
+import generate.hight_map.mapInitializer.NormalMatrixInitializer;
 
 import java.util.Random;
+
+import org.bukkit.Location;
 
 public abstract class BaseHeightMap implements HeightMapInterface {
 
 	public static void main(String[] args) {
-		HeightMapInterface generate = new SteepHeightMap().setMax((short)170).setMin((short)50).setSeed(100).generate(100);
+		HeightMapInterface generate = new SteepHeightMap().setMax((short)170).setMin((short)50).setSeed(100);
+		generate.setAroundSmoothInitializer(null, null, 80, 60);
+		generate.generate(100);
 		HeightMapUtil.print(generate, 100);
 //		HeightMapInterface generate2 = new NormalHeightMap().setMaxMin((short)50, (short)170).generate(100);
 //		HeightMapUtil.print(generate2, 100);
@@ -78,10 +85,10 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 //		return this;
 //	}
 
-	protected void setSize(int size) {
+	final protected void setSize(int size) {
 		if (size < 2) {
 			size = 2;
-			heightMap = new short[size][size];
+			heightMap = initializerInterface.getMatrix(size);
 		} else {
 			// 2^xの形にする
 			int count = 1;
@@ -92,54 +99,9 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 				size /= 2;
 				count *= 2;
 			}
-			heightMap = new short[count + 1][count + 1];
+			heightMap = initializerInterface.getMatrix(count + 1);
 		}
 	}
-
-//	/**
-//	 *
-//	 * @param x 左上の点x
-//	 * @param y 左上の点y
-//	 * @param length　正方形の辺の長さ
-//	 */
-//	protected void generate(int x, int y, int length) {
-//		if (length <= 1) {
-//			return;
-//		}
-//
-//		int x1 = x;
-//		int x2 = x + length;
-//		int y1 = y;
-//		int y2 = y + length;
-//
-//		//(x1,y1) (x1,y2)
-//		//(x2,y1) (x2,y2)
-//
-//		//中点
-//		short midValue = (short)(((heightMap[x1][y1] + heightMap[x1][y2] + heightMap[x2][y1] + heightMap[x2][y2]) / 4.0) + getError(length));
-//		setHeight((x1 + x2) / 2, (y1 + y2) / 2, midValue);
-//
-//		//左中点
-//		setSideMidPoint(x1, y1, x2, y1, length);
-//
-//		//上中点
-//		setSideMidPoint(x1, y1, x1, y2, length);
-//
-//		//下中点
-//		setSideMidPoint(x2, y1, x2, y2, length);
-//
-//		//右中点
-//		setSideMidPoint(x1, y2, x2, y2, length);
-//
-////		HeightMapUtil.print(this);
-////		System.out.println();
-//
-//		//新たに作られた4つの正方形に対しても同じことを
-//		generate(x1, y1, length / 2);
-//		generate(x1, (y1 + y2)/2, length / 2);
-//		generate((x1 + x2)/2, y1, length / 2);
-//		generate((x1 + x2)/2, (y1 + y2)/2, length / 2);
-//	}
 
 	/**
 	 * (x1,y1) (x2,y2)
@@ -162,7 +124,9 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 		if (val > max) {
 			val = max;
 		}
-		heightMap[x][y] = val;
+		if (heightMap[x][y] == 0) {
+			heightMap[x][y] = val;
+		}
 	}
 
 	@Override
@@ -183,5 +147,12 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 	protected short getError(int length) {
 		short rtn = (short) ((r.nextInt(getCreateSize() / 2) - getCreateSize() / 4) * length / getCreateSize());
 		return rtn;
+	}
+	
+	MatrixInitializerInterface initializerInterface = new NormalMatrixInitializer();
+	
+	public HeightMapInterface setAroundSmoothInitializer(Location minLoc, Location maxLoc, int xLength, int zLength) {
+		initializerInterface = new AroundSmoothMapInitializer(minLoc, maxLoc, xLength, zLength);
+		return this;
 	}
 }

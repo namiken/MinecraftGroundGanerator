@@ -1,5 +1,7 @@
 package generate.hight_map;
 
+import org.bukkit.Location;
+
 public interface HeightMapInterface {
 	public HeightMapInterface generate(int size);
 
@@ -14,4 +16,6 @@ public interface HeightMapInterface {
 	public HeightMapInterface setMax(short max);
 
 	public HeightMapInterface setMin(short min);
+	
+	public HeightMapInterface setAroundSmoothInitializer(Location minLoc, Location maxLoc, int xLength, int zLength);
 }
