@@ -1,9 +1,11 @@
 package generate.hight_map;
 
+
 import generate.hight_map.imple.SteepHeightMap;
 import generate.hight_map.mapInitializer.AroundSmoothMapInitializer;
 import generate.hight_map.mapInitializer.MatrixInitializerInterface;
 import generate.hight_map.mapInitializer.NormalMatrixInitializer;
+import generate.hight_map.imple.MountainHeightMap;
 
 import java.util.Random;
 
@@ -46,8 +48,8 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 		return this;
 	}
 
-	short max = 70;
-	short min = 50;
+	protected short max = 70;
+	protected short min = 50;
 	@Override
 	public HeightMapInterface setMax(short max) {
 		if (max < 0) {
