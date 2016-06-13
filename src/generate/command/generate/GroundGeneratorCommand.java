@@ -56,6 +56,9 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 		heightMapMap.put("STEEP", SteepHeightMap.class);
 	}
 
+	//optionを設定する
+	GenerateCommandOptionParser optionParser = new GenerateCommandOptionParser();
+	
 	@Override
 	public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
 		if (!(paramCommandSender instanceof Player)) {
@@ -84,8 +87,7 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 		BlockSetterInterface blockSetter = getBlockSetter(blockSetterName);
 		HeightMapInterface heightMap = getHeightMap(heightMapName);
 
-		//optionを設定する
-		GenerateCommandOptionParser optionParser = new GenerateCommandOptionParser();
+		//option設定
 		List<CommandOptionInterface> options = optionParser.getOptions(paramArrayOfString, paramCommandSender);
 		if (options == null) {
 			p.sendMessage(ChatColor.RED + "オプションにエラーがあるため実行出来ませんでした。");
@@ -147,6 +149,10 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 			return (List<String>)StringUtil.copyPartialMatches(arg3[0], blockSetterMap.keySet(), new ArrayList<String>(blockSetterMap.size()));
 		} else if (arg3.length == 2) {
 			return (List<String>)StringUtil.copyPartialMatches(arg3[1], heightMapMap.keySet(), new ArrayList<String>(heightMapMap.size()));
+		} else if (arg3.length > 2) {
+			if (arg3[arg3.length - 1].trim().startsWith("-")) {
+				return (List<String>)StringUtil.copyPartialMatches(arg3[arg3.length - 1], optionParser.getNameList(), new ArrayList<String>(optionParser.getNameList().size()));
+			}
 		}
 		return ImmutableList.of();
 	}

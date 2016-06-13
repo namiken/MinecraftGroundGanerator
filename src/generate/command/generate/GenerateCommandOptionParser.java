@@ -8,6 +8,7 @@ import generate.command.generate.option.SmoothOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -70,5 +71,13 @@ public class GenerateCommandOptionParser {
 		} else {
 			return optionList;
 		}
+	}
+	
+	/**
+	 * 登録されているオプションの一覧を取得
+	 * @return
+	 */
+	public Set<String> getNameList() {
+		return options.keySet();
 	}
 }
