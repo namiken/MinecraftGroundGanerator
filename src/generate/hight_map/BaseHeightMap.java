@@ -13,7 +13,7 @@ import org.bukkit.Location;
 public abstract class BaseHeightMap implements HeightMapInterface {
 
 	public static void main(String[] args) {
-		HeightMapInterface generate = 
+		HeightMapInterface generate =
 				new SteepHeightMap()
 		.setMax((short)99).setMin((short)50)
 		.setSeed(500)
@@ -65,13 +65,13 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 		}
 		return this;
 	}
-	
+
 	@Override
 	public HeightMapInterface setMin(short min) {
 		if (min < 0) {
 			throw new RuntimeException("max dont allow negative value");
 		}
-		
+
 		this.min = min;
 		if (max < min) {
 			this.max = (short) (min + 1);
@@ -153,33 +153,33 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 		short rtn = (short) ((r.nextInt(getCreateSize() / 2) - getCreateSize() / 4) * length / getCreateSize());
 		return rtn;
 	}
-	
+
 	protected MatrixInitializerInterface initializerInterface = new NormalMatrixInitializer();
-	
+
 	protected int xLength = -1;
 	protected int zLength = -1;
 	protected Location minLoc;
 	protected Location maxLoc;
-	
+
 	@Override
 	public HeightMapInterface setMinLocMaxLoc(Location minLoc, Location maxLoc) {
 		this.minLoc = minLoc;
 		this.maxLoc = maxLoc;
-		
+
 		this.xLength = Math.abs(maxLoc.getBlockX() - minLoc.getBlockX());
 		this.zLength = Math.abs(maxLoc.getBlockZ() - minLoc.getBlockZ());
-		
+
 		if (isAroundSmooth) {
 			initializerInterface = new AroundSmoothMapInitializer(minLoc, maxLoc, xLength, zLength);
 		}
 		return this;
 	}
-	
+
 	protected boolean isAroundSmooth = false;
 	@Override
 	public HeightMapInterface setAroundSmoothFlg(boolean isAroundSmooth) {
 		this.isAroundSmooth = isAroundSmooth;
-		
+
 		if (minLoc != null && maxLoc != null) {
 			initializerInterface = new AroundSmoothMapInitializer(minLoc, maxLoc, xLength, zLength);
 		}

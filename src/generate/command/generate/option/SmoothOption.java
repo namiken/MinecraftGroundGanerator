@@ -12,7 +12,7 @@ public class SmoothOption implements CommandOptionInterface {
 
 
 	boolean smoothFlg = false;
-	
+
 	@Override
 	public void setValue(String value) {
 		if (Boolean.parseBoolean(value)) {
@@ -22,17 +22,15 @@ public class SmoothOption implements CommandOptionInterface {
 
 	@Override
 	public void applyOption(BlockSetterInterface setter, HeightMapInterface heightMap) {
+		heightMap.setAroundSmoothFlg(smoothFlg);
 	}
 
 	@Override
 	public String check(String value) {
-		return null;
-	}
-
-	@Override
-	public CommandOptionInterface copy() {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		if ("TRUE".equals(value.toUpperCase())) {
+			return null;
+		}
+		return "true以外許可されていません。(" + value +")";
 	}
 
 }

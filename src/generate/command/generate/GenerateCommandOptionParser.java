@@ -7,6 +7,7 @@ import generate.command.generate.option.SmoothOption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -15,17 +16,19 @@ import org.bukkit.command.CommandSender;
 
 public class GenerateCommandOptionParser {
 	static HashMap<String, CommandOptionInterface> options = new HashMap<String, CommandOptionInterface>();
+	static Set<String> tabComlate = new HashSet<String>();
+
 	{
 		regist(new MaxOption());
 		regist(new MinOption());
 		regist(new SmoothOption());
 	}
-	
+
 	public static void regist(CommandOptionInterface option) {
 		options.put(option.getName().toLowerCase(), option);
-		
+		tabComlate.add("-" + option.getName().toUpperCase());
 	}
-	
+
 	/**
 	 * 一つでもエラーがある場合はnullを返す
 	 * @param commandParam
@@ -34,9 +37,9 @@ public class GenerateCommandOptionParser {
 	 */
 	public List<CommandOptionInterface> getOptions(String[] commandParam, CommandSender sender) {
 		ArrayList<CommandOptionInterface> optionList = new ArrayList<CommandOptionInterface>();
-		
+
 		boolean errorFlg = false;
-		
+
 		CommandOptionInterface option = null;
 		for (String param : commandParam) {
 			//option名の取得
@@ -49,7 +52,7 @@ public class GenerateCommandOptionParser {
 				}
 				continue;
 			}
-			
+
 			//option値の取得
 			if (option != null) {
 				String value = param.trim();
@@ -72,12 +75,12 @@ public class GenerateCommandOptionParser {
 			return optionList;
 		}
 	}
-	
+
 	/**
 	 * 登録されているオプションの一覧を取得
 	 * @return
 	 */
-	public Set<String> getNameList() {
-		return options.keySet();
+	public Set<String> getTabCompleteList() {
+		return tabComlate;
 	}
 }

@@ -29,12 +29,6 @@ public class MaxOption implements CommandOptionInterface{
 		return null;
 	}
 
-	@Override
-	public CommandOptionInterface copy() {
-		return new MaxOption();
-	}
-
-
 	String value;
 	@Override
 	public void setValue(String value) {

@@ -8,5 +8,4 @@ public interface CommandOptionInterface {
 	public void setValue(String value);
 	public void applyOption(BlockSetterInterface setter, HeightMapInterface heightMap);
 	public String check(String value);
-	public CommandOptionInterface copy();
 }

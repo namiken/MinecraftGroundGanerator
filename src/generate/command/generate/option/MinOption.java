@@ -28,13 +28,7 @@ public class MinOption implements CommandOptionInterface{
 		}
 		return null;
 	}
-	
-	@Override
-	public CommandOptionInterface copy() {
-		MinOption minOption = new MinOption();
-		return minOption;
-	}
-	
+
 	String value;
 	@Override
 	public void setValue(String value) {

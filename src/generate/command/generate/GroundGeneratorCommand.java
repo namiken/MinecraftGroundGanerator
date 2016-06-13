@@ -58,7 +58,7 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 
 	//optionを設定する
 	GenerateCommandOptionParser optionParser = new GenerateCommandOptionParser();
-	
+
 	@Override
 	public boolean onCommand(CommandSender paramCommandSender, Command paramCommand, String paramString, String[] paramArrayOfString) {
 		if (!(paramCommandSender instanceof Player)) {
@@ -96,7 +96,6 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 		for (CommandOptionInterface option : options) {
 			option.applyOption(blockSetter, heightMap);
 		}
-		
 
 		if (blockSetter == null) {
 			p.sendMessage(ChatColor.RED + "block setterが存在しません。" + blockSetterName);
@@ -109,7 +108,7 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 
 		//設定した範囲の長さを指定する
 		heightMap.setMinLocMaxLoc(minLoc, maxLoc);
-		
+
 		RunnableExcuter runnableExcuter = new RunnableExcuter(minLoc, maxLoc);
 		if (runnableExcuter.isLocked()) {
 			p.sendMessage(ChatColor.RED + "現在実行中です。");
@@ -151,7 +150,7 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 			return (List<String>)StringUtil.copyPartialMatches(arg3[1], heightMapMap.keySet(), new ArrayList<String>(heightMapMap.size()));
 		} else if (arg3.length > 2) {
 			if (arg3[arg3.length - 1].trim().startsWith("-")) {
-				return (List<String>)StringUtil.copyPartialMatches(arg3[arg3.length - 1], optionParser.getNameList(), new ArrayList<String>(optionParser.getNameList().size()));
+				return (List<String>)StringUtil.copyPartialMatches(arg3[arg3.length - 1], optionParser.getTabCompleteList(), new ArrayList<String>(optionParser.getTabCompleteList().size()));
 			}
 		}
 		return ImmutableList.of();
