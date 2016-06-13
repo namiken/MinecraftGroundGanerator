@@ -33,4 +33,12 @@ public class DesertBlockSetter extends AbstractGroundBlockSetter{
 			add.getBlock().setData((byte) r.nextInt(3));
 		}
 	}
+
+	@Override
+	public void setMax(int max) {
+	}
+
+	@Override
+	public void setMin(int min) {
+	}
 }

@@ -7,7 +7,7 @@ import org.bukkit.Material;
 
 public class NormalMountainBlockSetter implements BlockSetterInterface {
 
-	int maxHeight;
+	int maxHeight = 70;
 	public NormalMountainBlockSetter(int maxHeight) {
 		this.maxHeight = maxHeight;
 	}
@@ -90,6 +90,15 @@ public class NormalMountainBlockSetter implements BlockSetterInterface {
 		if (add.getBlock().getType() != m) {
 			add.getBlock().setType(m);
 		}
+	}
+
+	@Override
+	public void setMax(int max) {
+		maxHeight = max;
+	}
+
+	@Override
+	public void setMin(int min) {
 	}
 
 }

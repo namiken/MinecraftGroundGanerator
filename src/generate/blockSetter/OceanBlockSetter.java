@@ -30,4 +30,12 @@ public class OceanBlockSetter extends LiquidBlockSetter{
 		return Material.DIRT;
 	}
 
+	@Override
+	public void setMax(int max) {
+	}
+
+	@Override
+	public void setMin(int min) {
+	}
+
 }

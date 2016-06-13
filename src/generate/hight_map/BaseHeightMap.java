@@ -5,7 +5,6 @@ import generate.hight_map.imple.SteepHeightMap;
 import generate.hight_map.mapInitializer.AroundSmoothMapInitializer;
 import generate.hight_map.mapInitializer.MatrixInitializerInterface;
 import generate.hight_map.mapInitializer.NormalMatrixInitializer;
-import generate.hight_map.imple.MountainHeightMap;
 
 import java.util.Random;
 
@@ -14,10 +13,15 @@ import org.bukkit.Location;
 public abstract class BaseHeightMap implements HeightMapInterface {
 
 	public static void main(String[] args) {
-		HeightMapInterface generate = new SteepHeightMap().setMax((short)170).setMin((short)50).setSeed(100);
-		generate.setAroundSmoothInitializer(null, null, 80, 60);
-		generate.generate(100);
-		HeightMapUtil.print(generate, 100);
+		HeightMapInterface generate = 
+				new SteepHeightMap()
+		.setMax((short)99).setMin((short)50)
+		.setSeed(500)
+		.setMinLocMaxLoc(new Location(null, 0, 60, 0), new Location(null, 32, 60, 32));
+		generate.setAroundSmoothFlg(true);
+		generate.generate(32);
+//		HeightMapUtil.printRange(generate, 20 + 1 ,30 + 1);
+		HeightMapUtil.print(generate,100);
 //		HeightMapInterface generate2 = new NormalHeightMap().setMaxMin((short)50, (short)170).generate(100);
 //		HeightMapUtil.print(generate2, 100);
 	}
@@ -87,22 +91,21 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 //		return this;
 //	}
 
+	/**
+	 * sizeをセットし、行列を生成する
+	 * @param size
+	 */
 	final protected void setSize(int size) {
 		if (size < 2) {
 			size = 2;
 			heightMap = initializerInterface.getMatrix(size);
 		} else {
-			// 2^xの形にする
-			int count = 1;
-			while (size != 1) {
-				if (size % 2 == 1) {
-					size++;
-				}
-				size /= 2;
-				count *= 2;
-			}
-			heightMap = initializerInterface.getMatrix(count + 1);
+			// 2^x + 1の形にする
+			int count = HeightMapUtil.geTruncation2Multiplier(size);
+			count++;
+			heightMap = initializerInterface.getMatrix(count);
 		}
+//		HeightMapUtil.printRange(this, 20 + 1 ,30 + 1);
 	}
 
 	/**
@@ -151,10 +154,35 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 		return rtn;
 	}
 	
-	MatrixInitializerInterface initializerInterface = new NormalMatrixInitializer();
+	protected MatrixInitializerInterface initializerInterface = new NormalMatrixInitializer();
 	
-	public HeightMapInterface setAroundSmoothInitializer(Location minLoc, Location maxLoc, int xLength, int zLength) {
-		initializerInterface = new AroundSmoothMapInitializer(minLoc, maxLoc, xLength, zLength);
+	protected int xLength = -1;
+	protected int zLength = -1;
+	protected Location minLoc;
+	protected Location maxLoc;
+	
+	@Override
+	public HeightMapInterface setMinLocMaxLoc(Location minLoc, Location maxLoc) {
+		this.minLoc = minLoc;
+		this.maxLoc = maxLoc;
+		
+		this.xLength = Math.abs(maxLoc.getBlockX() - minLoc.getBlockX());
+		this.zLength = Math.abs(maxLoc.getBlockZ() - minLoc.getBlockZ());
+		
+		if (isAroundSmooth) {
+			initializerInterface = new AroundSmoothMapInitializer(minLoc, maxLoc, xLength, zLength);
+		}
+		return this;
+	}
+	
+	protected boolean isAroundSmooth = false;
+	@Override
+	public HeightMapInterface setAroundSmoothFlg(boolean isAroundSmooth) {
+		this.isAroundSmooth = isAroundSmooth;
+		
+		if (minLoc != null && maxLoc != null) {
+			initializerInterface = new AroundSmoothMapInitializer(minLoc, maxLoc, xLength, zLength);
+		}
 		return this;
 	}
 }

@@ -3,6 +3,7 @@ package generate.command.generate;
 import generate.command.CommandOptionInterface;
 import generate.command.generate.option.MaxOption;
 import generate.command.generate.option.MinOption;
+import generate.command.generate.option.SmoothOption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class GenerateCommandOptionParser {
 	{
 		regist(new MaxOption());
 		regist(new MinOption());
+		regist(new SmoothOption());
 	}
 	
 	public static void regist(CommandOptionInterface option) {

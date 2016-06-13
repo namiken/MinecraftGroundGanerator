@@ -36,4 +36,12 @@ public class StoneGrassWaterBlockSetter extends LiquidBlockSetter{
 		return Material.STONE;
 	}
 
+	@Override
+	public void setMax(int max) {
+	}
+
+	@Override
+	public void setMin(int min) {
+	}
+
 }

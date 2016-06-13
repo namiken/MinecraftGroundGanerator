@@ -17,5 +17,13 @@ public class GrassAndStoneSetter extends AbstractGroundBlockSetter{
 	protected Material getUnderGround() {
 		return Material.STONE;
 	}
+
+	@Override
+	public void setMax(int max) {
+	}
+
+	@Override
+	public void setMin(int min) {
+	}
 	
 }

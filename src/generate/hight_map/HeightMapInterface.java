@@ -17,5 +17,7 @@ public interface HeightMapInterface {
 
 	public HeightMapInterface setMin(short min);
 	
-	public HeightMapInterface setAroundSmoothInitializer(Location minLoc, Location maxLoc, int xLength, int zLength);
+	public HeightMapInterface setAroundSmoothFlg(boolean isAroundSmooth);
+	
+	public HeightMapInterface setMinLocMaxLoc(Location minLoc, Location maxLoc);
 }

@@ -37,23 +37,23 @@ import com.google.common.collect.ImmutableList;
 
 public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 	public GroundGeneratorCommand() {
-		blockSetterMap = new HashMap<String, BlockSetterInterface>();
-		blockSetterMap.put("DESERT", new DesertBlockSetter());
-		blockSetterMap.put("NORMAL", new GrassAndStoneSetter());
-		blockSetterMap.put("NETHER", new NetherLikeBlockSetter());
-		blockSetterMap.put("OCEAN", new OceanBlockSetter());
-		blockSetterMap.put("SNOW", new SnowBlockSetter());
-		blockSetterMap.put("STONE_MOUNTAIN", new StoneMountainAndLaveBlockSetter());
-		blockSetterMap.put("MOUNTAIN", new NormalMountainBlockSetter(150));
-		blockSetterMap.put("STONE_GRASS_WATER", new StoneGrassWaterBlockSetter());
-		blockSetterMap.put("SNOW_ICE", new SnowIceBlockSetter());
+		blockSetterMap = new HashMap<String, Class<? extends BlockSetterInterface>>();
+		blockSetterMap.put("DESERT", DesertBlockSetter.class);
+		blockSetterMap.put("NORMAL", GrassAndStoneSetter.class);
+		blockSetterMap.put("NETHER", NetherLikeBlockSetter.class);
+		blockSetterMap.put("OCEAN", OceanBlockSetter.class);
+		blockSetterMap.put("SNOW", SnowBlockSetter.class);
+		blockSetterMap.put("STONE_MOUNTAIN", StoneMountainAndLaveBlockSetter.class);
+		blockSetterMap.put("MOUNTAIN", NormalMountainBlockSetter.class);
+		blockSetterMap.put("STONE_GRASS_WATER", StoneGrassWaterBlockSetter.class);
+		blockSetterMap.put("SNOW_ICE", SnowIceBlockSetter.class);
 
-		heightMapMap = new HashMap<String, HeightMapInterface>();
-		heightMapMap.put("FLAT", new FlatHeightMap());
-		heightMapMap.put("FLAT2", new FlatLevel2HeightMap());
-		heightMapMap.put("MOUNTAIN", new MountainHeightMap());
-		heightMapMap.put("NORMAL", new NormalHeightMap());
-		heightMapMap.put("STEEP", new SteepHeightMap());
+		heightMapMap = new HashMap<String, Class<? extends HeightMapInterface>>();
+		heightMapMap.put("FLAT", FlatHeightMap.class);
+		heightMapMap.put("FLAT2", FlatLevel2HeightMap.class);
+		heightMapMap.put("MOUNTAIN", MountainHeightMap.class);
+		heightMapMap.put("NORMAL", NormalHeightMap.class);
+		heightMapMap.put("STEEP", SteepHeightMap.class);
 	}
 
 	@Override
@@ -105,6 +105,9 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 			return true;
 		}
 
+		//設定した範囲の長さを指定する
+		heightMap.setMinLocMaxLoc(minLoc, maxLoc);
+		
 		RunnableExcuter runnableExcuter = new RunnableExcuter(minLoc, maxLoc);
 		if (runnableExcuter.isLocked()) {
 			p.sendMessage(ChatColor.RED + "現在実行中です。");
@@ -116,16 +119,26 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 	}
 
 
-	static HashMap<String, BlockSetterInterface> blockSetterMap = null;
+	static HashMap<String, Class<? extends BlockSetterInterface>> blockSetterMap = null;
 
-	static HashMap<String, HeightMapInterface> heightMapMap = null;
+	static HashMap<String, Class<? extends HeightMapInterface>> heightMapMap = null;
 
 	private BlockSetterInterface getBlockSetter(String blockSetterName) {
-		return blockSetterMap.get(blockSetterName);
+		try {
+			return blockSetterMap.get(blockSetterName).newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	private HeightMapInterface getHeightMap(String heightMapName) {
-		return heightMapMap.get(heightMapName);
+		try {
+			return heightMapMap.get(heightMapName).newInstance();
+		} catch (InstantiationException | IllegalAccessException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@Override

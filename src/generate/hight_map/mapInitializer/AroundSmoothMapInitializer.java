@@ -1,13 +1,14 @@
 package generate.hight_map.mapInitializer;
 
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 
 public class AroundSmoothMapInitializer implements MatrixInitializerInterface{
-	Location minLoc;
-	Location maxLoc;
+	public Location minLoc;
+	public Location maxLoc;
 	
-	int xLength;
-	int zLength;
+	protected int xLength;
+	protected int zLength;
 	
 	public AroundSmoothMapInitializer(Location minLoc, Location maxLoc, int xLength, int zLength) {
 		this.minLoc = minLoc;
@@ -15,6 +16,13 @@ public class AroundSmoothMapInitializer implements MatrixInitializerInterface{
 		this.xLength = xLength;
 		this.zLength = zLength;
 	}
+	
+//	public AroundSmoothMapInitializer(AroundSmoothMapInitializer initializer) {
+//		this.minLoc = initializer.minLoc;
+//		this.maxLoc = initializer.maxLoc;
+//		this.xLength = initializer.xLength;
+//		this.zLength = initializer.zLength;
+//	}
 
 	@Override
 	public short[][] getMatrix(int size) {
@@ -44,9 +52,9 @@ public class AroundSmoothMapInitializer implements MatrixInitializerInterface{
 	}
 
 	private short getMaxHeight(Location add, int x, int z) {
-//		Block highestBlockAt = add.getWorld().getHighestBlockAt(add.clone().add(x, 0 ,z));
-//		return (short) highestBlockAt.getY();
-		return 2;
+		Block highestBlockAt = add.getWorld().getHighestBlockAt(add.clone().add(x, 0 ,z));
+		return (short) highestBlockAt.getY();
+//		return 60;
 	}
 
 }

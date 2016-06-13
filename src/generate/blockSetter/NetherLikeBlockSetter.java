@@ -29,4 +29,12 @@ public class NetherLikeBlockSetter extends LiquidBlockSetter{
 		return Material.NETHERRACK;
 	}
 
+	@Override
+	public void setMax(int max) {
+	}
+
+	@Override
+	public void setMin(int min) {
+	}
+
 }

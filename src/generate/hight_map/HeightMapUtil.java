@@ -46,4 +46,36 @@ public class HeightMapUtil {
 			System.out.println();
 		}
 	}
+	
+	public static void printRange(HeightMapInterface heightMap, int length, int width) {
+		for (int i = 0; i < Math.min(length, heightMap.getHeightMap().length); i++) {
+			for (int j = 0; j < Math.min(width, heightMap.getHeightMap().length); j++) {
+				if (heightMap.getHeight(i, j) < 10) {
+					System.out.print(" " + heightMap.getHeight(i, j) + " ");
+				} else {
+					System.out.print(heightMap.getHeight(i, j) + " ");
+				}
+			}
+			System.out.println();
+		}
+		System.out.println();
+	}
+	
+	/**
+	 * valに一番近い最大の2^xの形を取得
+	 * @param val
+	 * @return
+	 */
+	public static int geTruncation2Multiplier(int val) {
+		// 2^xの形にする
+		int count = 1;
+		while (val != 1) {
+			if (val % 2 == 1) {
+				val++;
+			}
+			val /= 2;
+			count *= 2;
+		}
+		return count;
+	}
 }

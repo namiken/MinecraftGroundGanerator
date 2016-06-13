@@ -12,6 +12,7 @@ public class MaxOption implements CommandOptionInterface{
 
 	@Override
 	public void applyOption(BlockSetterInterface setter, HeightMapInterface heightMap) {
+		setter.setMax(Short.parseShort(value));
 		heightMap.setMax(Short.parseShort(value));
 	}
 
