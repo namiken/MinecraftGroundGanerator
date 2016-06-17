@@ -3,6 +3,7 @@ package generate.command.generate;
 import generate.command.CommandOptionInterface;
 import generate.command.generate.option.MaxOption;
 import generate.command.generate.option.MinOption;
+import generate.command.generate.option.SeedOption;
 import generate.command.generate.option.SmoothOption;
 
 import java.util.ArrayList;
@@ -18,10 +19,11 @@ public class GenerateCommandOptionParser {
 	static HashMap<String, CommandOptionInterface> options = new HashMap<String, CommandOptionInterface>();
 	static Set<String> tabComlate = new HashSet<String>();
 
-	{
+	public static void init(){
 		regist(new MaxOption());
 		regist(new MinOption());
 		regist(new SmoothOption());
+		regist(new SeedOption());
 	}
 
 	public static void regist(CommandOptionInterface option) {

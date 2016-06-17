@@ -1,5 +1,7 @@
 package generate.hight_map.imple;
 
+import java.util.Random;
+
 import generate.hight_map.HeightMapInterface;
 import generate.hight_map.HeightMapUtil;
 import generate.hight_map.mapInitializer.AroundSmoothMapInitializer;
@@ -10,58 +12,75 @@ import org.bukkit.Location;
 public class MountainHeightMap extends NormalHeightMap{
 	int originalSize;
 
-	
-//	@Override
-//	public HeightMapInterface setXLenghtZLenght(int xLenght, int zLenght) {
-//		this.xLenght = xLenght;
-//		this.zLenght = zLenght;
-//		return this;
-//	}
-	
 	@Override
 	public HeightMapInterface generate(int size) {
 
 		isFirst = true;
 
 		originalSize = size;
-		
+
 		//指定範囲に収まるようなheightMapを作成する
 		int subMapSize = HeightMapUtil.geTruncation2Multiplier(Math.min(xLength, zLength)) / 2;
 		MountainHeightMapSub mountainHeightMapSub = (MountainHeightMapSub) new MountainHeightMapSub(subMapSize).setMin(min).setMax(max);
-		if (initializerInterface instanceof AroundSmoothMapInitializer) {
-			mountainHeightMapSub.setAroundSmoothFlg(true);
+		if (seedSetFlg) {
+			mountainHeightMapSub.setSeed(seed);
 		}
+		//隣接するブロックを特定出来ないためとりあえず未対応
+//		if (initializerInterface instanceof AroundSmoothMapInitializer) {
+//			mountainHeightMapSub.setAroundSmoothFlg(true);
+//		}
 		mountainHeightMapSub.generate(subMapSize);
-		
+
+
 		//map initializerを設定する
 		MountainInitializer newInitializer = new MountainInitializer(mountainHeightMapSub.getHeightMap(), xLength, zLength);
+		if (seedSetFlg) {
+			newInitializer.setSeed(seed);
+		}
 		if (initializerInterface instanceof AroundSmoothMapInitializer) {
 			AroundSmoothMapInitializer beforeInitializer = (AroundSmoothMapInitializer) initializerInterface;
 			newInitializer.setAroundSmooth(beforeInitializer.minLoc, beforeInitializer.maxLoc);
 		}
 		initializerInterface = newInitializer;
 
+		//生成
 		super.generate(size);
 
-//		int marge = (int) Math.floor((getCreateSize() - originalSize)/2);
-//
-//		short[][] heightMap = getHeightMap();
-//
-//		setSize(originalSize);
-//		for (int i = marge; i < originalSize + marge; i++) {
-//			for (int j = marge; j < originalSize + marge; j++) {
-//				setHeight(i - marge, j - marge, heightMap[i][j]);
-//			}
-//		}
+		//mountainHeightMapSubと組み合わせる
+		addMapOnCenter(this.heightMap, mountainHeightMapSub.getHeightMap());
+
 		return this;
+	}
+
+	boolean seedSetFlg = false;
+	long seed = 0;
+
+	@Override
+	public HeightMapInterface setSeed(long seed) {
+		seedSetFlg = true;
+		this.seed = seed;
+		return super.setSeed(seed);
+	}
+
+	protected short[][] addMapOnCenter(short[][] bigMap, short[][] smallMap) {
+		short[][] map = bigMap;
+		int xMarge = (xLength - smallMap.length) / 2;
+		int zMarge = (zLength - smallMap[0].length) / 2;
+
+		int xIndex = 0;
+		for (int x = xMarge; x < xMarge + smallMap.length; x++) {
+			int zIndex = 0;
+			for (int z = zMarge; z < zMarge + smallMap[0].length; z++) {
+				map[x][z] = smallMap[xIndex][zIndex];
+				zIndex++;
+			}
+			xIndex++;
+		}
+		return map;
 	}
 
 	@Override
 	protected void setHeight(int x, int y, short val) {
-		//4辺を最小値にする　削除予定
-//		if (x == 0|| y == 0 || x == heightMap.length - 1 || y == heightMap.length - 1) {
-//			val = min;
-//		}
 		super.setHeight(x, y, val);
 	}
 
@@ -69,16 +88,10 @@ public class MountainHeightMap extends NormalHeightMap{
 
 	@Override
 	protected short getError(int length) {
-		short rtn = super.getError(length);
-//		//最初だけ高くする
-//		if (isFirst) {
-//			rtn = (short) (max - 3);
-//			isFirst = false;
-//			return (short) Math.abs(rtn);
-//		}
+		short rtn = super.getError(length / 2);
 		return rtn;
 	}
-	
+
 }
 
 /**
@@ -88,8 +101,8 @@ public class MountainHeightMap extends NormalHeightMap{
  */
 class MountainHeightMapSub extends NormalHeightMap {
 	protected boolean isFirst = true;
-	
-	
+
+
 	int size;
 	public MountainHeightMapSub(int size) {
 		this.size = size;
@@ -122,7 +135,7 @@ class MountainHeightMapSub extends NormalHeightMap {
 		}
 		return super.generate(size);
 	}
-	
+
 	@Override
 	public HeightMapInterface setMinLocMaxLoc(Location minLoc, Location maxLoc) {
 		super.setMinLocMaxLoc(minLoc, maxLoc);
@@ -131,7 +144,7 @@ class MountainHeightMapSub extends NormalHeightMap {
 		super.setMinLocMaxLoc(minLoc.clone().add(xMarge, 0, zMarge), maxLoc.subtract(xMarge, 0, zMarge));
 		return this;
 	}
-	
+
 }
 
 /**
@@ -144,12 +157,18 @@ class MountainInitializer implements MatrixInitializerInterface  {
 		this.xLength = xLength;
 		this.zLength =zLength;
 	}
-	
+
+	Random r = new Random();
+
+	public void setSeed(long seed) {
+		r = new Random(seed);
+	}
+
 	int xLength;
 	int zLength;
-	
+
 	AroundSmoothMapInitializer aroundSmoothMapInitializer = null;
-	
+
 	/**
 	 * around smooth化する場合はセットする
 	 * @param minLoc
@@ -160,9 +179,9 @@ class MountainInitializer implements MatrixInitializerInterface  {
 	public void setAroundSmooth(Location minLoc, Location maxLoc) {
 		aroundSmoothMapInitializer = new AroundSmoothMapInitializer(minLoc, maxLoc, xLength, zLength);
 	}
-	
+
 	short[][] subHeightMap;
-	
+
 	@Override
 	public short[][] getMatrix(int size) {
 		short[][] map;
@@ -171,20 +190,47 @@ class MountainInitializer implements MatrixInitializerInterface  {
 		} else {
 			map = aroundSmoothMapInitializer.getMatrix(size);
 		}
-		
+
 		int xMarge = (xLength - subHeightMap.length) / 2;
 		int zMarge = (zLength - subHeightMap.length) / 2;
-		
+
 		int xIndex = 0;
 		for (int x = xMarge; x < xMarge + subHeightMap.length; x++) {
 			int zIndex = 0;
 			for (int z = zMarge; z < zMarge + subHeightMap.length; z++) {
-				map[x][z] = subHeightMap[xIndex][zIndex];
+				map[x][z] = getInitilizeHeight(xIndex, zIndex, size);
 				zIndex++;
 			}
 			xIndex++;
 		}
 		return map;
 	}
-	
+
+	public short getInitilizeHeight(int xIndex, int zIndex, int size) {
+		//４辺から求めるのは今のところなし
+//		short val;
+//
+//		//角度を計算
+//		double atan2 = Math.atan2(xIndex - (size/2), zIndex - (size/2)) + Math.PI;
+//
+//		if ((atan2 <= Math.PI * 0.25  && atan2 >= 0)|| (atan2 > Math.PI * 1.75 && atan2 <= Math.PI * 2)) {
+//		//右
+//			val = (short) (subHeightMap[xIndex][0]);
+//		} else if (atan2 > Math.PI * 0.25 && atan2 <= Math.PI * 0.75) {
+//		//上
+//			val = (short) (subHeightMap[0][zIndex]);
+//		} else if (atan2 > Math.PI * 0.75 && atan2 <= Math.PI * 1.25) {
+//		//左
+//			val = (short) (subHeightMap[xIndex][subHeightMap[0].length - 1]);
+//		} else if (atan2 > Math.PI * 1.25 && atan2 <= Math.PI * 1.75) {
+//		//下
+//			val = (short) (subHeightMap[subHeightMap.length - 1][zIndex]);
+//		} else {
+//			new RuntimeException(atan2 + "is invalid").printStackTrace();
+//			val = 60;
+//		}
+//		val = 60;
+		return subHeightMap[xIndex][zIndex];
+	}
+
 }

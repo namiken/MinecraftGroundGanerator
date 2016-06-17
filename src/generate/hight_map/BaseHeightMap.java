@@ -1,7 +1,7 @@
 package generate.hight_map;
 
 
-import generate.hight_map.imple.SteepHeightMap;
+import generate.hight_map.imple.MountainHeightMap;
 import generate.hight_map.mapInitializer.AroundSmoothMapInitializer;
 import generate.hight_map.mapInitializer.MatrixInitializerInterface;
 import generate.hight_map.mapInitializer.NormalMatrixInitializer;
@@ -14,14 +14,14 @@ public abstract class BaseHeightMap implements HeightMapInterface {
 
 	public static void main(String[] args) {
 		HeightMapInterface generate =
-				new SteepHeightMap()
-		.setMax((short)99).setMin((short)50)
-		.setSeed(500)
-		.setMinLocMaxLoc(new Location(null, 0, 60, 0), new Location(null, 32, 60, 32));
+				new MountainHeightMap()
+		.setMax((short)99)
+		.setSeed(101)
+		.setMinLocMaxLoc(new Location(null, 99, 81, 99), new Location(null, -1, 61, -1));
 		generate.setAroundSmoothFlg(true);
-		generate.generate(32);
+		generate.generate(100);
 //		HeightMapUtil.printRange(generate, 20 + 1 ,30 + 1);
-		HeightMapUtil.print(generate,100);
+		HeightMapUtil.printRange(generate, 100, 100);
 //		HeightMapInterface generate2 = new NormalHeightMap().setMaxMin((short)50, (short)170).generate(100);
 //		HeightMapUtil.print(generate2, 100);
 	}

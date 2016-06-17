@@ -29,12 +29,12 @@ public class SnowIceBlockSetter extends LiquidBlockSetter {
 	protected Material getSurfaceUnder(Location add, int height) {
 		return Material.STONE;
 	}
-	
+
 	@Override
 	public void setBlock(Location add, int height) {
 		super.setBlock(add, height);
-		
-		if (height + 1 < add.getWorld().getMaxHeight()) {
+
+		if (height + 1 < add.getWorld().getMaxHeight() && height >= getSeaHeight()) {
 			add.setY(height + 1);
 			add.getBlock().setType(Material.SNOW);
 		}

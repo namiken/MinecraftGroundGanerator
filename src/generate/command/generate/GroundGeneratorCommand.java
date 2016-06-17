@@ -93,9 +93,6 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 			p.sendMessage(ChatColor.RED + "オプションにエラーがあるため実行出来ませんでした。");
 			return true;
 		}
-		for (CommandOptionInterface option : options) {
-			option.applyOption(blockSetter, heightMap);
-		}
 
 		if (blockSetter == null) {
 			p.sendMessage(ChatColor.RED + "block setterが存在しません。" + blockSetterName);
@@ -104,6 +101,10 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 		if (heightMap == null) {
 			p.sendMessage(ChatColor.RED + "height mapが存在しません。" + heightMapName);
 			return true;
+		}
+
+		for (CommandOptionInterface option : options) {
+			option.applyOption(blockSetter, heightMap);
 		}
 
 		//設定した範囲の長さを指定する
@@ -135,11 +136,13 @@ public class GroundGeneratorCommand implements CommandExecutor, TabCompleter{
 
 	private HeightMapInterface getHeightMap(String heightMapName) {
 		try {
-			return heightMapMap.get(heightMapName).newInstance();
+			if (heightMapMap.containsKey(heightMapName)) {
+				return heightMapMap.get(heightMapName).newInstance();
+			}
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 
 	@Override

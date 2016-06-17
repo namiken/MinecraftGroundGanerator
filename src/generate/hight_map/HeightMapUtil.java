@@ -2,9 +2,9 @@ package generate.hight_map;
 
 public class HeightMapUtil {
 	public static void print(HeightMapInterface heightMap2) {
-		print(heightMap2, 40);
+		print(heightMap2, heightMap2.getCreateSize());
 	}
-	
+
 	public static void print(HeightMapInterface heightMap2, int printSize) {
 		for (int i = 0; i < Math.min(printSize, heightMap2.getHeightMap().length); i++) {
 			for (int j = 0; j < Math.min(printSize, heightMap2.getHeightMap().length); j++) {
@@ -46,7 +46,7 @@ public class HeightMapUtil {
 			System.out.println();
 		}
 	}
-	
+
 	public static void printRange(HeightMapInterface heightMap, int length, int width) {
 		for (int i = 0; i < Math.min(length, heightMap.getHeightMap().length); i++) {
 			for (int j = 0; j < Math.min(width, heightMap.getHeightMap().length); j++) {
@@ -60,7 +60,7 @@ public class HeightMapUtil {
 		}
 		System.out.println();
 	}
-	
+
 	/**
 	 * valに一番近い最大の2^xの形を取得
 	 * @param val

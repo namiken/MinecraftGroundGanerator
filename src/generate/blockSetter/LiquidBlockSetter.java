@@ -12,7 +12,7 @@ public abstract class LiquidBlockSetter implements BlockSetterInterface{
 	public void setSeed(long seed) {
 		r = new Random(seed);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void setBlock(Location add, int height) {
@@ -24,43 +24,16 @@ public abstract class LiquidBlockSetter implements BlockSetterInterface{
 			if (y < 2) {
 				m = Material.BEDROCK;
 			}
-//			}else if (height < 60) {
-//				if (height < y && y <= 60) {
-//					m = getLiquid(add, height);
-//				} else if (height - 3 < y) {
-//					if (y < 56) {
-//						m = getLiquidButtom(add, height);
-//					} else {
-//						m = getCoastline(add, height);
-//					}
-//				} else if (y <= height) {
-//					m = getUnderGround(add, height);
-//				}
-//			} else if (height < 63){
-//				if (y < height - 3) {
-//					m = getUnderGround(add, height);
-//				} else if (y <= height) {
-//					m = getCoastline(add, height);
-//				}
-//			} else {
-//				if (y < height - 3) {
-//					m = getUnderGround(add, height);
-//				} else if (y < height) {
-//					m = getSurfaceUnder(add, height);
-//				} else if (y == height) {
-//					m = getSurface(add, height);
-//				}
-//			}
 				else if (height < y) {
-					if (y < 60) {
+					if (y < getSeaHeight()) {
 						m = getLiquid(add, height);
 					} else {
 						//AIR
 					}
 				} else if (height - 3 <= y && y <= height) {
-					if (56 < y && y < 63) {
+					if (getSeaHeight() - 4 < y && y < getSeaHeight() + 3) {
 						m = getCoastline(add, height);
-					} else if (63 <= y) {
+					} else if (getSeaHeight() + 3 <= y) {
 						if (y == height) {
 							m = getSurface(add, height);
 						} else {
@@ -98,5 +71,9 @@ public abstract class LiquidBlockSetter implements BlockSetterInterface{
 
 	protected Material getUnderGround(Location add, int height) {
 		return Material.STONE;
+	}
+
+	protected int getSeaHeight() {
+		return 60;
 	}
 }

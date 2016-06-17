@@ -12,6 +12,7 @@ public class NormalHeightMap extends BaseHeightMap{
 	public HeightMapInterface generate(int size) {
 		setSize(size);
 
+
 		if (isAroundSmooth) {
 			heightMap[0][0] = (short) ((heightMap[0][1] + heightMap[1][0])/2.0);
 			heightMap[heightMap.length - 1][0] = (short) ((heightMap[heightMap.length - 2][0] + heightMap[heightMap.length - 1][1])/2.0);
@@ -34,6 +35,7 @@ public class NormalHeightMap extends BaseHeightMap{
 
 			length /= 2;
 		}
+
 		return this;
 	}
 
